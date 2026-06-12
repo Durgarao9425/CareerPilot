@@ -30,8 +30,28 @@ const CreativeTemplate = ({ data }) => {
               {experience.map((exp) => (
                 <div key={exp.id} style={{ marginBottom: '14px', borderLeft: '3px solid #7c3aed', paddingLeft: '10px' }}>
                   <p style={{ fontSize: '13px', fontWeight: '700', color: '#1f2937' }}>{exp.title}</p>
-                  <p style={{ fontSize: '11px', color: '#7c3aed' }}>{exp.company} · {exp.startDate} — {exp.current ? 'Present' : exp.endDate}</p>
-                  {exp.description && <p style={{ fontSize: '11px', color: '#4b5563', marginTop: '4px', lineHeight: '1.6', whiteSpace: 'pre-line' }}>{exp.description}</p>}
+                  <p style={{ fontSize: '11px', color: '#7c3aed' }}>
+                    {exp.showLinkInTitle && exp.website ? (
+                      <a href={exp.website} target="_blank" rel="noopener noreferrer" style={{ color: 'inherit', textDecoration: 'underline' }}>{exp.company}</a>
+                    ) : exp.company}
+                    {" · "}
+                    {exp.startDate} — {exp.current ? 'Present' : exp.endDate}
+                  </p>
+                  {exp.roles && exp.roles.length > 0 ? (
+                    <div style={{ marginTop: '6px', display: 'flex', flexDirection: 'column', gap: '6px' }}>
+                      {exp.roles.map((role) => (
+                        <div key={role.id}>
+                          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline' }}>
+                            <span style={{ fontSize: '11px', fontWeight: '600', color: '#374151' }}>{role.title}</span>
+                            <span style={{ fontSize: '10px', color: '#9ca3af' }}>{role.period}</span>
+                          </div>
+                          {role.description && <p style={{ fontSize: '10px', color: '#4b5563', marginTop: '2px', lineHeight: '1.5', whiteSpace: 'pre-line' }}>{role.description}</p>}
+                        </div>
+                      ))}
+                    </div>
+                  ) : (
+                    exp.description && <p style={{ fontSize: '11px', color: '#4b5563', marginTop: '4px', lineHeight: '1.6', whiteSpace: 'pre-line' }}>{exp.description}</p>
+                  )}
                 </div>
               ))}
             </section>
@@ -41,7 +61,11 @@ const CreativeTemplate = ({ data }) => {
               <h2 style={{ fontSize: '12px', fontWeight: '700', color: '#7c3aed', textTransform: 'uppercase', letterSpacing: '2px', marginBottom: '10px' }}>Projects</h2>
               {projects.map((proj) => (
                 <div key={proj.id} style={{ marginBottom: '10px' }}>
-                  <p style={{ fontSize: '12px', fontWeight: '600', color: '#1f2937' }}>{proj.name}</p>
+                  <p style={{ fontSize: '12px', fontWeight: '600', color: '#1f2937' }}>
+                    {proj.showLinkInTitle && (proj.website || proj.url) ? (
+                      <a href={proj.website || proj.url} target="_blank" rel="noopener noreferrer" style={{ color: 'inherit', textDecoration: 'underline' }}>{proj.name}</a>
+                    ) : proj.name}
+                  </p>
                   {proj.technologies?.length > 0 && <p style={{ fontSize: '10px', color: '#7c3aed', marginTop: '1px' }}>{proj.technologies.join(' · ')}</p>}
                   {proj.description && <p style={{ fontSize: '11px', color: '#4b5563', marginTop: '3px' }}>{proj.description}</p>}
                 </div>
@@ -68,7 +92,11 @@ const CreativeTemplate = ({ data }) => {
               {education.map((edu) => (
                 <div key={edu.id} style={{ marginBottom: '8px' }}>
                   <p style={{ fontSize: '11px', fontWeight: '600', color: '#1f2937' }}>{edu.degree}</p>
-                  <p style={{ fontSize: '10px', color: '#6b7280' }}>{edu.institution}</p>
+                  <p style={{ fontSize: '10px', color: '#6b7280' }}>
+                    {edu.showLinkInTitle && edu.website ? (
+                      <a href={edu.website} target="_blank" rel="noopener noreferrer" style={{ color: 'inherit', textDecoration: 'underline' }}>{edu.institution}</a>
+                    ) : edu.institution}
+                  </p>
                   <p style={{ fontSize: '10px', color: '#9ca3af' }}>{edu.endDate}</p>
                 </div>
               ))}

@@ -1,16 +1,47 @@
 import Sidebar from '@components/layout/Sidebar';
 import Topbar from '@components/layout/Topbar';
 
-const DashboardLayout = ({ children, title }) => {
+const DashboardLayout = ({ children, title, fullScreen = false }) => {
+  if (fullScreen) {
+    return (
+      <div style={{ minHeight: '100vh', background: 'var(--bg-base)', width: '100%', display: 'flex', flexDirection: 'column' }}>
+        {children}
+      </div>
+    );
+  }
+
   return (
-    <div className="min-h-screen bg-surface-50 dark:bg-surface-950 flex w-full">
+    <div style={{ minHeight: '100vh', background: 'var(--bg-base)', display: 'flex', width: '100%' }}>
       <Sidebar />
-      <div className="flex-1 flex flex-col lg:ml-64 min-w-0 min-h-screen">
+      <div style={{
+        flex: 1,
+        display: 'flex',
+        flexDirection: 'column',
+        minWidth: 0,
+        minHeight: '100vh',
+        marginLeft: 0,
+      }}
+        className="dashboard-content"
+      >
         <Topbar title={title} />
-        <main className="flex-1 p-4 lg:p-6 overflow-x-hidden w-full">
+        <main style={{
+          flex: 1,
+          padding: '20px 16px',
+          overflowX: 'hidden',
+          width: '100%',
+        }}
+          className="dashboard-main"
+        >
           {children}
         </main>
       </div>
+
+      <style>{`
+        @media (min-width: 1024px) {
+          .dashboard-content { margin-left: 240px !important; }
+          .dashboard-main { padding: 28px 28px !important; }
+        }
+      `}</style>
     </div>
   );
 };

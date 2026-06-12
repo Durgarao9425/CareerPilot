@@ -1,47 +1,50 @@
 import { cn } from '@utils/helpers';
 
 const SkeletonCard = ({ className }) => (
-  <div className={cn('card p-6 space-y-4', className)}>
-    <div className="skeleton h-4 w-1/3" />
-    <div className="skeleton h-3 w-full" />
-    <div className="skeleton h-3 w-5/6" />
-    <div className="skeleton h-3 w-4/6" />
+  <div className={cn('card', className)} style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
+    <div className="skeleton" style={{ height: 14, width: '33%' }} />
+    <div className="skeleton" style={{ height: 11, width: '100%' }} />
+    <div className="skeleton" style={{ height: 11, width: '80%' }} />
+    <div className="skeleton" style={{ height: 11, width: '60%' }} />
   </div>
 );
 
 const SkeletonStat = () => (
-  <div className="stat-card">
-    <div className="skeleton w-12 h-12 rounded-xl" />
-    <div className="space-y-2 flex-1">
-      <div className="skeleton h-7 w-16" />
-      <div className="skeleton h-3 w-24" />
+  <div className="card" style={{ padding: '20px 22px', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+    <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+      <div className="skeleton" style={{ height: 28, width: 60 }} />
+      <div className="skeleton" style={{ height: 11, width: 90 }} />
+      <div className="skeleton" style={{ height: 10, width: 70 }} />
     </div>
+    <div className="skeleton" style={{ width: 48, height: 48, borderRadius: '50%' }} />
   </div>
 );
 
 const SkeletonResumeCard = () => (
-  <div className="card p-5 space-y-4">
-    <div className="flex items-start justify-between">
-      <div className="space-y-2 flex-1">
-        <div className="skeleton h-5 w-2/3" />
-        <div className="skeleton h-3 w-1/2" />
-      </div>
-      <div className="skeleton w-8 h-8 rounded-lg" />
+  <div style={{
+    display: 'flex',
+    alignItems: 'center',
+    gap: 12,
+    padding: '12px 14px',
+    border: '1px solid var(--border)',
+    borderRadius: 'var(--radius-md)',
+  }}>
+    <div className="skeleton" style={{ width: 40, height: 40, borderRadius: 10, flexShrink: 0 }} />
+    <div style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: 6 }}>
+      <div className="skeleton" style={{ height: 13, width: '60%' }} />
+      <div className="skeleton" style={{ height: 10, width: '40%' }} />
     </div>
-    <div className="skeleton h-24 w-full rounded-xl" />
-    <div className="flex gap-2">
-      <div className="skeleton h-6 w-16 rounded-full" />
-      <div className="skeleton h-6 w-20 rounded-full" />
-    </div>
+    <div className="skeleton" style={{ height: 22, width: 70, borderRadius: 99 }} />
   </div>
 );
 
 const SkeletonText = ({ lines = 3, className }) => (
-  <div className={cn('space-y-2', className)}>
+  <div className={cn(className)} style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
     {Array.from({ length: lines }).map((_, i) => (
       <div
         key={i}
-        className={cn('skeleton h-3', i === lines - 1 ? 'w-3/4' : 'w-full')}
+        className="skeleton"
+        style={{ height: 11, width: i === lines - 1 ? '70%' : '100%' }}
       />
     ))}
   </div>

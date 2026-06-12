@@ -36,8 +36,10 @@ const DarkModeInitializer = () => {
   useEffect(() => {
     if (darkMode) {
       document.documentElement.classList.add('dark');
+      document.documentElement.setAttribute('data-theme', 'dark');
     } else {
       document.documentElement.classList.remove('dark');
+      document.documentElement.removeAttribute('data-theme');
     }
   }, [darkMode]);
   return null;
@@ -52,16 +54,18 @@ const AppInner = () => (
       toastOptions={{
         duration: 4000,
         style: {
-          background: 'var(--toast-bg, #1e293b)',
-          color: '#f1f5f9',
-          border: '1px solid #334155',
-          borderRadius: '12px',
+          background: 'var(--bg-card)',
+          color: 'var(--text-primary)',
+          border: '1px solid var(--border)',
+          borderRadius: 'var(--radius-md)',
           fontSize: '14px',
+          fontFamily: "'Inter', sans-serif",
           maxWidth: '380px',
+          boxShadow: 'var(--shadow-hover)',
         },
-        success: { iconTheme: { primary: '#22c55e', secondary: '#fff' } },
-        error: { iconTheme: { primary: '#ef4444', secondary: '#fff' } },
-        loading: { iconTheme: { primary: '#6366f1', secondary: '#fff' } },
+        success: { iconTheme: { primary: '#10b981', secondary: '#fff' } },
+        error:   { iconTheme: { primary: '#ef4444', secondary: '#fff' } },
+        loading: { iconTheme: { primary: '#6c47ff', secondary: '#fff' } },
       }}
     />
     <AppRouter />

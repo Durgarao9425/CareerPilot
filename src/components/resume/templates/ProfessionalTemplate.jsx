@@ -31,11 +31,31 @@ const ProfessionalTemplate = ({ data }) => {
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
                 <div>
                   <p style={{ fontSize: '13px', fontWeight: 'bold' }}>{exp.title}</p>
-                  <p style={{ fontSize: '12px', fontStyle: 'italic', color: '#555' }}>{exp.company}{exp.location && `, ${exp.location}`}</p>
+                  <p style={{ fontSize: '12px', fontStyle: 'italic', color: '#555' }}>
+                    {exp.showLinkInTitle && exp.website ? (
+                      <a href={exp.website} target="_blank" rel="noopener noreferrer" style={{ color: 'inherit', textDecoration: 'underline' }}>{exp.company}</a>
+                    ) : exp.company}
+                    {exp.location && `, ${exp.location}`}
+                  </p>
                 </div>
                 <p style={{ fontSize: '11px', color: '#666', whiteSpace: 'nowrap' }}>{exp.startDate} — {exp.current ? 'Present' : exp.endDate}</p>
               </div>
-              {exp.description && <p style={{ fontSize: '11px', lineHeight: '1.6', color: '#333', marginTop: '4px', whiteSpace: 'pre-line' }}>{exp.description}</p>}
+              
+              {exp.roles && exp.roles.length > 0 ? (
+                <div style={{ marginTop: '6px', marginLeft: '12px', display: 'flex', flexDirection: 'column', gap: '6px' }}>
+                  {exp.roles.map((role) => (
+                    <div key={role.id}>
+                      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline' }}>
+                        <p style={{ fontSize: '11px', fontWeight: 'bold' }}>{role.title}</p>
+                        <p style={{ fontSize: '10px', color: '#666' }}>{role.period}</p>
+                      </div>
+                      {role.description && <p style={{ fontSize: '10px', lineHeight: '1.5', color: '#333', marginTop: '2px', whiteSpace: 'pre-line' }}>{role.description}</p>}
+                    </div>
+                  ))}
+                </div>
+              ) : (
+                exp.description && <p style={{ fontSize: '11px', lineHeight: '1.6', color: '#333', marginTop: '4px', whiteSpace: 'pre-line' }}>{exp.description}</p>
+              )}
             </div>
           ))}
         </section>
@@ -49,7 +69,11 @@ const ProfessionalTemplate = ({ data }) => {
             <div key={edu.id} style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '8px' }}>
               <div>
                 <p style={{ fontSize: '13px', fontWeight: 'bold' }}>{edu.degree} in {edu.field}</p>
-                <p style={{ fontSize: '12px', fontStyle: 'italic', color: '#555' }}>{edu.institution}</p>
+                <p style={{ fontSize: '12px', fontStyle: 'italic', color: '#555' }}>
+                  {edu.showLinkInTitle && edu.website ? (
+                    <a href={edu.website} target="_blank" rel="noopener noreferrer" style={{ color: 'inherit', textDecoration: 'underline' }}>{edu.institution}</a>
+                  ) : edu.institution}
+                </p>
               </div>
               <p style={{ fontSize: '11px', color: '#666' }}>{edu.startDate} — {edu.endDate}</p>
             </div>

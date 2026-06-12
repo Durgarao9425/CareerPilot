@@ -107,17 +107,39 @@ const ModernTemplate = ({ data }) => {
                     <div className="flex justify-between items-start">
                       <div>
                         <h3 className="text-sm font-bold text-gray-800">{exp.title}</h3>
-                        <p className="text-xs text-indigo-600 font-medium">{exp.company}</p>
+                        <p className="text-xs text-indigo-600 font-medium">
+                          {exp.showLinkInTitle && exp.website ? (
+                            <a href={exp.website} target="_blank" rel="noopener noreferrer" className="underline">{exp.company}</a>
+                          ) : exp.company}
+                        </p>
                       </div>
                       <div className="text-right text-xs text-gray-500">
                         <p>{exp.startDate} — {exp.current ? 'Present' : exp.endDate}</p>
                         {exp.location && <p>{exp.location}</p>}
                       </div>
                     </div>
-                    {exp.description && (
-                      <div className="mt-1.5 text-xs text-gray-600 leading-relaxed whitespace-pre-line">
-                        {exp.description}
+                    {exp.roles && exp.roles.length > 0 ? (
+                      <div className="mt-2 ml-4 space-y-2 border-l border-indigo-100 pl-3">
+                        {exp.roles.map((role) => (
+                          <div key={role.id}>
+                            <div className="flex justify-between items-baseline">
+                              <h4 className="text-xs font-bold text-gray-800">{role.title}</h4>
+                              <span className="text-[10px] text-gray-500">{role.period}</span>
+                            </div>
+                            {role.description && (
+                              <p className="text-[11px] text-gray-500 mt-0.5 whitespace-pre-line leading-normal">
+                                {role.description}
+                              </p>
+                            )}
+                          </div>
+                        ))}
                       </div>
+                    ) : (
+                      exp.description && (
+                        <div className="mt-1.5 text-xs text-gray-600 leading-relaxed whitespace-pre-line">
+                          {exp.description}
+                        </div>
+                      )
                     )}
                   </div>
                 ))}
@@ -136,7 +158,11 @@ const ModernTemplate = ({ data }) => {
                   <div key={edu.id} className="flex justify-between">
                     <div>
                       <h3 className="text-sm font-bold text-gray-800">{edu.degree} in {edu.field}</h3>
-                      <p className="text-xs text-indigo-600">{edu.institution}</p>
+                      <p className="text-xs text-indigo-600">
+                        {edu.showLinkInTitle && edu.website ? (
+                          <a href={edu.website} target="_blank" rel="noopener noreferrer" className="underline">{edu.institution}</a>
+                        ) : edu.institution}
+                      </p>
                       {edu.gpa && <p className="text-xs text-gray-500">GPA: {edu.gpa}</p>}
                     </div>
                     <p className="text-xs text-gray-500">{edu.startDate} — {edu.endDate}</p>
@@ -156,8 +182,12 @@ const ModernTemplate = ({ data }) => {
                 {projects.map((proj) => (
                   <div key={proj.id}>
                     <div className="flex justify-between">
-                      <h3 className="text-sm font-bold text-gray-800">{proj.name}</h3>
-                      {proj.url && <a href={proj.url} className="text-xs text-indigo-600">{proj.url}</a>}
+                      <h3 className="text-sm font-bold text-gray-800">
+                        {proj.showLinkInTitle && (proj.website || proj.url) ? (
+                          <a href={proj.website || proj.url} target="_blank" rel="noopener noreferrer" className="underline">{proj.name}</a>
+                        ) : proj.name}
+                      </h3>
+                      {(proj.website || proj.url) && <a href={proj.website || proj.url} target="_blank" rel="noopener noreferrer" className="text-xs text-indigo-600 underline">{proj.website || proj.url}</a>}
                     </div>
                     {proj.technologies?.length > 0 && (
                       <p className="text-xs text-gray-500 mt-0.5">{proj.technologies.join(' · ')}</p>

@@ -14,13 +14,13 @@ import { generateInitials } from '@utils/helpers';
 import toast from 'react-hot-toast';
 
 const navItems = [
-  { to: '/dashboard', icon: HomeIcon, label: 'Dashboard' },
-  { to: '/builder', icon: DocumentTextIcon, label: 'Resume Builder' },
-  { to: '/ats', icon: ChartBarIcon, label: 'ATS Analyzer' },
-  { to: '/cover-letters', icon: EnvelopeIcon, label: 'Cover Letters' },
-  { to: '/job-matches', icon: BriefcaseIcon, label: 'Recommended Jobs' },
-  { to: '/interview-prep', icon: QuestionMarkCircleIcon, label: 'Interview Prep' },
-  { to: '/profile', icon: UserIcon, label: 'Profile' },
+  { to: '/dashboard',      icon: HomeIcon,                  label: 'Dashboard' },
+  { to: '/builder',        icon: DocumentTextIcon,          label: 'Resume Builder' },
+  { to: '/ats',            icon: ChartBarIcon,              label: 'ATS Analyzer' },
+  { to: '/cover-letters',  icon: EnvelopeIcon,              label: 'Cover Letters' },
+  { to: '/job-matches',    icon: BriefcaseIcon,             label: 'Recommended Jobs' },
+  { to: '/interview-prep', icon: QuestionMarkCircleIcon,    label: 'Interview Prep' },
+  { to: '/profile',        icon: UserIcon,                  label: 'Profile' },
 ];
 
 const Sidebar = () => {
@@ -42,22 +42,61 @@ const Sidebar = () => {
   };
 
   const renderSidebarContent = () => (
-    <div className="flex flex-col h-full">
-      {/* Logo */}
-      <div className="flex items-center gap-3 px-4 py-5 border-b border-surface-200 dark:border-surface-700">
-        <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-primary-500 to-purple-600 flex items-center justify-center shadow-glow">
-          <SparklesIcon className="w-5 h-5 text-white" />
+    <div style={{ display: 'flex', flexDirection: 'column', height: '100%' }}>
+
+      {/* ── Logo ── */}
+      <div style={{
+        display: 'flex',
+        alignItems: 'center',
+        gap: 12,
+        padding: '20px 16px 16px',
+        borderBottom: '1px solid var(--border)',
+      }}>
+        {/* Icon mark */}
+        <div style={{
+          width: 38,
+          height: 38,
+          borderRadius: 10,
+          background: 'linear-gradient(135deg, var(--brand) 0%, #a855f7 100%)',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          boxShadow: 'var(--shadow-btn)',
+          flexShrink: 0,
+          fontSize: 18,
+          color: 'white',
+          fontWeight: 700,
+          letterSpacing: '-1px',
+        }}>
+          ✦
         </div>
+
+        {/* Text */}
         <div>
-          <h1 className="font-display font-bold text-surface-900 dark:text-white text-base leading-tight flex items-center">
-            CareerPilot<span className="text-primary-500 font-black ml-0.5">+</span>
-          </h1>
-          <span className="text-[10px] text-surface-500 font-medium uppercase tracking-wider">AI Career Assistant</span>
+          <p style={{
+            fontSize: 15,
+            fontWeight: 700,
+            color: 'var(--text-primary)',
+            lineHeight: 1.2,
+            letterSpacing: '-0.3px',
+          }}>
+            CareerPilot
+          </p>
+          <p style={{
+            fontSize: 10,
+            fontWeight: 600,
+            color: 'var(--brand)',
+            letterSpacing: '0.08em',
+            textTransform: 'uppercase',
+            marginTop: 1,
+          }}>
+            AI ASSISTANT
+          </p>
         </div>
       </div>
 
-      {/* Nav Items */}
-      <nav className="flex-1 p-3 space-y-1 overflow-y-auto">
+      {/* ── Nav Items ── */}
+      <nav style={{ flex: 1, padding: '12px 8px', overflowY: 'auto', display: 'flex', flexDirection: 'column', gap: 2 }}>
         {navItems.map(({ to, icon: Icon, label }) => (
           <NavLink
             key={to}
@@ -65,42 +104,95 @@ const Sidebar = () => {
             onClick={() => dispatch(setSidebarOpen(false))}
             className={({ isActive }) => isActive ? 'nav-item-active' : 'nav-item'}
           >
-            <Icon className="w-5 h-5 flex-shrink-0" />
-            <span>{label}</span>
+            <Icon style={{ width: 18, height: 18, flexShrink: 0 }} />
+            <span style={{ fontSize: 14 }}>{label}</span>
           </NavLink>
         ))}
       </nav>
 
-      {/* Bottom */}
-      <div className="p-3 border-t border-surface-200 dark:border-surface-700 space-y-1">
+      {/* ── Bottom section ── */}
+      <div style={{
+        padding: '8px 8px 12px',
+        borderTop: '1px solid var(--border)',
+        display: 'flex',
+        flexDirection: 'column',
+        gap: 4,
+      }}>
+        {/* Dark mode toggle */}
         <button
           onClick={() => dispatch(toggleDarkMode())}
-          className="nav-item w-full"
+          className="nav-item"
+          style={{ width: '100%', textAlign: 'left' }}
         >
-          {darkMode ? <SunIcon className="w-5 h-5" /> : <MoonIcon className="w-5 h-5" />}
+          {darkMode
+            ? <SunIcon style={{ width: 18, height: 18 }} />
+            : <MoonIcon style={{ width: 18, height: 18 }} />
+          }
           <span>{darkMode ? 'Light Mode' : 'Dark Mode'}</span>
         </button>
 
-        <button onClick={handleLogout} className="nav-item w-full text-danger-500 hover:bg-danger-50 dark:hover:bg-danger-950/30">
-          <ArrowRightOnRectangleIcon className="w-5 h-5" />
+        {/* Sign out */}
+        <button
+          onClick={handleLogout}
+          className="nav-item"
+          style={{ width: '100%', textAlign: 'left', color: 'var(--danger)' }}
+        >
+          <ArrowRightOnRectangleIcon style={{ width: 18, height: 18 }} />
           <span>Sign Out</span>
         </button>
 
-        {/* User */}
+        {/* User card */}
         {user && (
-          <div className="flex items-center gap-3 px-3 py-2.5 mt-2 rounded-xl bg-surface-100 dark:bg-surface-800">
-            <div className="w-8 h-8 rounded-full bg-gradient-to-br from-primary-500 to-purple-600 flex items-center justify-center text-white text-xs font-bold flex-shrink-0">
-              {user.photoURL ? (
-                <img src={user.photoURL} alt={user.displayName} className="w-8 h-8 rounded-full object-cover" />
-              ) : (
-                generateInitials(user.displayName || user.email)
-              )}
+          <div style={{
+            display: 'flex',
+            alignItems: 'center',
+            gap: 10,
+            padding: '10px 12px',
+            borderRadius: 'var(--radius-sm)',
+            background: 'var(--brand-light)',
+            marginTop: 4,
+          }}>
+            {/* Avatar */}
+            <div style={{
+              width: 34,
+              height: 34,
+              borderRadius: '50%',
+              background: 'linear-gradient(135deg, var(--brand) 0%, #a855f7 100%)',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              fontSize: 13,
+              fontWeight: 700,
+              color: 'white',
+              flexShrink: 0,
+              overflow: 'hidden',
+            }}>
+              {user.photoURL
+                ? <img src={user.photoURL} alt={user.displayName || ''} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                : generateInitials(user.displayName || user.email)
+              }
             </div>
-            <div className="min-w-0">
-              <p className="text-xs font-medium text-surface-900 dark:text-white truncate">
+
+            {/* Name + plan */}
+            <div style={{ minWidth: 0, flex: 1 }}>
+              <p style={{
+                fontSize: 13,
+                fontWeight: 600,
+                color: 'var(--text-primary)',
+                overflow: 'hidden',
+                textOverflow: 'ellipsis',
+                whiteSpace: 'nowrap',
+              }}>
                 {user.displayName || 'User'}
               </p>
-              <p className="text-xs text-surface-500 truncate">{user.email}</p>
+              <p style={{
+                fontSize: 11,
+                color: 'var(--brand)',
+                fontWeight: 500,
+                marginTop: 1,
+              }}>
+                Free Plan
+              </p>
             </div>
           </div>
         )}
@@ -111,7 +203,21 @@ const Sidebar = () => {
   return (
     <>
       {/* Desktop sidebar */}
-      <aside className="hidden lg:flex flex-col w-64 h-screen bg-white dark:bg-surface-900 border-r border-surface-200 dark:border-surface-800 flex-shrink-0 fixed left-0 top-0 z-30">
+      <aside style={{
+        display: 'none',
+        position: 'fixed',
+        left: 0,
+        top: 0,
+        width: 240,
+        height: '100vh',
+        background: 'var(--bg-sidebar)',
+        borderRight: '1px solid var(--border)',
+        flexDirection: 'column',
+        zIndex: 30,
+        flexShrink: 0,
+      }}
+        className="lg-sidebar"
+      >
         {renderSidebarContent()}
       </aside>
 
@@ -124,20 +230,42 @@ const Sidebar = () => {
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
               onClick={() => dispatch(setSidebarOpen(false))}
-              className="fixed inset-0 z-40 bg-black/60 backdrop-blur-sm lg:hidden"
+              style={{
+                position: 'fixed',
+                inset: 0,
+                zIndex: 40,
+                background: 'rgba(0,0,0,0.55)',
+                backdropFilter: 'blur(4px)',
+              }}
             />
             <motion.aside
-              initial={{ x: -280 }}
+              initial={{ x: -260 }}
               animate={{ x: 0 }}
-              exit={{ x: -280 }}
+              exit={{ x: -260 }}
               transition={{ type: 'spring', damping: 30, stiffness: 300 }}
-              className="fixed left-0 top-0 z-50 w-64 h-screen bg-white dark:bg-surface-900 border-r border-surface-200 dark:border-surface-800 lg:hidden"
+              style={{
+                position: 'fixed',
+                left: 0,
+                top: 0,
+                zIndex: 50,
+                width: 240,
+                height: '100vh',
+                background: 'var(--bg-sidebar)',
+                borderRight: '1px solid var(--border)',
+              }}
             >
               {renderSidebarContent()}
             </motion.aside>
           </>
         )}
       </AnimatePresence>
+
+      {/* CSS for desktop sidebar visibility */}
+      <style>{`
+        @media (min-width: 1024px) {
+          .lg-sidebar { display: flex !important; }
+        }
+      `}</style>
     </>
   );
 };

@@ -1,13 +1,72 @@
 import { useDispatch, useSelector } from 'react-redux';
+import { motion, AnimatePresence } from 'framer-motion';
 import { addCertification, updateCertification, removeCertification, selectResumeData } from '@features/resume/resumeSlice';
 import Input from '@components/ui/Input';
 import Button from '@components/ui/Button';
-import { PlusIcon, TrashIcon, CheckBadgeIcon } from '@heroicons/react/24/outline';
+import Modal from '@components/ui/Modal';
+import { PlusIcon, TrashIcon, CheckBadgeIcon, PencilIcon } from '@heroicons/react/24/outline';
+import { useState } from 'react';
+import { v4 as uuidv4 } from 'uuid';
 
 const CertificationsSection = () => {
   const dispatch = useDispatch();
   const { certifications } = useSelector(selectResumeData);
-  const update = (id, field) => (e) => dispatch(updateCertification({ id, data: { [field]: e.target.value } }));
+
+  // Modal and editing states
+  const [modalOpen, setModalOpen] = useState(false);
+  const [editingItem, setEditingItem] = useState(null);
+
+  // Form local state
+  const [form, setForm] = useState({
+    name: '',
+    issuer: '',
+    date: '',
+    credentialId: '',
+    url: '',
+  });
+
+  const handleOpenAdd = () => {
+    setEditingItem(null);
+    setForm({
+      name: '',
+      issuer: '',
+      date: '',
+      credentialId: '',
+      url: '',
+    });
+    setModalOpen(true);
+  };
+
+  const handleOpenEdit = (cert) => {
+    setEditingItem(cert);
+    setForm({
+      name: cert.name || '',
+      issuer: cert.issuer || '',
+      date: cert.date || '',
+      credentialId: cert.credentialId || '',
+      url: cert.url || '',
+    });
+    setModalOpen(true);
+  };
+
+  const handleSave = () => {
+    const itemData = {
+      name: form.name,
+      issuer: form.issuer,
+      date: form.date,
+      credentialId: form.credentialId,
+      url: form.url,
+    };
+
+    if (editingItem) {
+      dispatch(updateCertification({ id: editingItem.id, data: itemData }));
+    } else {
+      const newId = uuidv4();
+      dispatch(addCertification()); // inserts empty
+      dispatch(updateCertification({ id: certifications[certifications.length - 1]?.id || newId, data: itemData }));
+    }
+    setModalOpen(false);
+  };
 
   return (
     <div className="card p-6 space-y-4">
@@ -18,37 +77,109 @@ const CertificationsSection = () => {
           </div>
           <h3 className="font-semibold text-surface-900 dark:text-white font-display">Certifications</h3>
         </div>
-        <Button size="sm" icon={PlusIcon} onClick={() => dispatch(addCertification())}>Add</Button>
+        <Button size="sm" icon={PlusIcon} onClick={handleOpenAdd}>Add</Button>
       </div>
+
       {certifications.length === 0 ? (
         <div className="text-center py-8 text-surface-400 text-sm">
           <CheckBadgeIcon className="w-10 h-10 mx-auto mb-2 opacity-40" />
           <p>No certifications yet</p>
-          <button onClick={() => dispatch(addCertification())} className="text-primary-500 mt-1 hover:underline">+ Add certification</button>
+          <button onClick={handleOpenAdd} className="text-primary-500 mt-1 hover:underline">+ Add certification</button>
         </div>
       ) : (
-        <div className="space-y-4">
-          {certifications.map((cert) => (
-            <div key={cert.id} className="border border-surface-200 dark:border-surface-700 rounded-xl p-4">
-              <div className="flex justify-between mb-3">
-                <p className="font-medium text-sm text-surface-900 dark:text-white">{cert.name || 'New Certification'}</p>
-                <button onClick={() => dispatch(removeCertification(cert.id))} className="p-1 rounded hover:bg-danger-50 dark:hover:bg-danger-900/30 text-danger-500">
-                  <TrashIcon className="w-4 h-4" />
-                </button>
-              </div>
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                <Input label="Certification Name" placeholder="AWS Solutions Architect" value={cert.name} onChange={update(cert.id, 'name')} />
-                <Input label="Issuing Organization" placeholder="Amazon Web Services" value={cert.issuer} onChange={update(cert.id, 'issuer')} />
-                <Input label="Issue Date" placeholder="Jan 2024" value={cert.date} onChange={update(cert.id, 'date')} />
-                <Input label="Credential ID" placeholder="ABC-12345" value={cert.credentialId} onChange={update(cert.id, 'credentialId')} />
-                <div className="sm:col-span-2">
-                  <Input label="Credential URL" placeholder="https://..." value={cert.url} onChange={update(cert.id, 'url')} />
+        <div className="space-y-3">
+          <AnimatePresence>
+            {certifications.map((cert) => (
+              <motion.div
+                key={cert.id}
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -10 }}
+                className="flex items-center justify-between p-4 border border-surface-200 dark:border-surface-700 rounded-xl hover:shadow-sm transition-all"
+              >
+                <div>
+                  <p className="font-semibold text-surface-900 dark:text-white text-sm">
+                    {cert.name || 'New Certification'}
+                  </p>
+                  <p className="text-xs text-surface-500 mt-0.5">
+                    {cert.issuer || ''} {cert.date ? `| ${cert.date}` : ''}
+                  </p>
                 </div>
-              </div>
-            </div>
-          ))}
+                <div className="flex items-center gap-1.5">
+                  <button
+                    onClick={() => handleOpenEdit(cert)}
+                    className="p-2 rounded-lg hover:bg-surface-100 dark:hover:bg-surface-800 text-surface-600 dark:text-surface-300 transition-colors"
+                  >
+                    <PencilIcon className="w-4 h-4" />
+                  </button>
+                  <button
+                    onClick={() => dispatch(removeCertification(cert.id))}
+                    className="p-2 rounded-lg hover:bg-danger-50 dark:hover:bg-danger-900/30 text-danger-500 transition-colors"
+                  >
+                    <TrashIcon className="w-4 h-4" />
+                  </button>
+                </div>
+              </motion.div>
+            ))}
+          </AnimatePresence>
         </div>
       )}
+
+      {/* Certification Modal */}
+      <Modal
+        isOpen={modalOpen}
+        onClose={() => setModalOpen(false)}
+        title={editingItem ? "Update an existing certification" : "Create a new certification"}
+      >
+        <div className="space-y-5">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <Input
+              label="Certification Name"
+              placeholder="AWS Certified Solutions Architect"
+              value={form.name}
+              onChange={(e) => setForm(prev => ({ ...prev, name: e.target.value }))}
+            />
+            <Input
+              label="Issuing Organization"
+              placeholder="Amazon Web Services"
+              value={form.issuer}
+              onChange={(e) => setForm(prev => ({ ...prev, issuer: e.target.value }))}
+            />
+            <Input
+              label="Issue Date"
+              placeholder="Jan 2024"
+              value={form.date}
+              onChange={(e) => setForm(prev => ({ ...prev, date: e.target.value }))}
+            />
+            <Input
+              label="Credential ID"
+              placeholder="AWS-SAR-12345"
+              value={form.credentialId}
+              onChange={(e) => setForm(prev => ({ ...prev, credentialId: e.target.value }))}
+            />
+          </div>
+
+          <Input
+            label="Credential URL"
+            placeholder="https://credly.com/..."
+            value={form.url}
+            onChange={(e) => setForm(prev => ({ ...prev, url: e.target.value }))}
+          />
+
+          {/* Form Actions */}
+          <div className="flex justify-end gap-3 pt-4 border-t border-surface-200 dark:border-surface-700">
+            <button
+              onClick={() => setModalOpen(false)}
+              className="px-4 py-2 text-sm font-medium text-surface-600 hover:text-surface-800 dark:text-surface-450 dark:hover:text-surface-200"
+            >
+              Cancel
+            </button>
+            <Button onClick={handleSave}>
+              {editingItem ? 'Save Changes' : 'Create'}
+            </Button>
+          </div>
+        </div>
+      </Modal>
     </div>
   );
 };

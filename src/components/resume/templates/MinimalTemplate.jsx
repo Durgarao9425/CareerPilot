@@ -19,11 +19,30 @@ const MinimalTemplate = ({ data }) => {
               <div style={{ display: 'flex', justifyContent: 'space-between' }}>
                 <div>
                   <span style={{ fontSize: '13px', fontWeight: '600', color: '#111827' }}>{exp.title}</span>
-                  <span style={{ fontSize: '12px', color: '#6b7280' }}> · {exp.company}</span>
+                  <span style={{ fontSize: '12px', color: '#6b7280' }}>
+                    {" · "}
+                    {exp.showLinkInTitle && exp.website ? (
+                      <a href={exp.website} target="_blank" rel="noopener noreferrer" style={{ color: 'inherit', textDecoration: 'underline' }}>{exp.company}</a>
+                    ) : exp.company}
+                  </span>
                 </div>
                 <span style={{ fontSize: '11px', color: '#9ca3af' }}>{exp.startDate} — {exp.current ? 'Now' : exp.endDate}</span>
               </div>
-              {exp.description && <p style={{ fontSize: '11px', color: '#4b5563', marginTop: '4px', lineHeight: '1.6', whiteSpace: 'pre-line' }}>{exp.description}</p>}
+              {exp.roles && exp.roles.length > 0 ? (
+                <div style={{ marginTop: '6px', marginLeft: '12px', display: 'flex', flexDirection: 'column', gap: '6px' }}>
+                  {exp.roles.map((role) => (
+                    <div key={role.id}>
+                      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline' }}>
+                        <span style={{ fontSize: '11px', fontWeight: '600', color: '#374151' }}>{role.title}</span>
+                        <span style={{ fontSize: '10px', color: '#9ca3af' }}>{role.period}</span>
+                      </div>
+                      {role.description && <p style={{ fontSize: '10px', color: '#4b5563', marginTop: '2px', lineHeight: '1.5', whiteSpace: 'pre-line' }}>{role.description}</p>}
+                    </div>
+                  ))}
+                </div>
+              ) : (
+                exp.description && <p style={{ fontSize: '11px', color: '#4b5563', marginTop: '4px', lineHeight: '1.6', whiteSpace: 'pre-line' }}>{exp.description}</p>
+              )}
             </div>
           ))}
         </section>
@@ -35,7 +54,12 @@ const MinimalTemplate = ({ data }) => {
             <div key={edu.id} style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '8px' }}>
               <div>
                 <span style={{ fontSize: '13px', fontWeight: '600', color: '#111827' }}>{edu.degree}</span>
-                <span style={{ fontSize: '12px', color: '#6b7280' }}> — {edu.institution}</span>
+                <span style={{ fontSize: '12px', color: '#6b7280' }}>
+                  {" — "}
+                  {edu.showLinkInTitle && edu.website ? (
+                    <a href={edu.website} target="_blank" rel="noopener noreferrer" style={{ color: 'inherit', textDecoration: 'underline' }}>{edu.institution}</a>
+                  ) : edu.institution}
+                </span>
               </div>
               <span style={{ fontSize: '11px', color: '#9ca3af' }}>{edu.endDate}</span>
             </div>

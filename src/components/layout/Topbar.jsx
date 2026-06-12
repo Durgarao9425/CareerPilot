@@ -13,59 +13,130 @@ const Topbar = ({ title }) => {
   const navigate = useNavigate();
 
   return (
-    <header className="sticky top-0 z-20 h-16 bg-white/80 dark:bg-surface-900/80 backdrop-blur-xl border-b border-surface-200 dark:border-surface-800 flex items-center justify-between px-4 lg:px-6">
+    <header style={{
+      position: 'sticky',
+      top: 0,
+      zIndex: 20,
+      height: 60,
+      background: 'var(--bg-card)',
+      backdropFilter: 'blur(20px)',
+      borderBottom: '1px solid var(--border)',
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'space-between',
+      padding: '0 20px',
+      gap: 12,
+    }}>
       {/* Left */}
-      <div className="flex items-center gap-3">
+      <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
         <button
           onClick={() => dispatch(toggleSidebar())}
-          className="btn-ghost p-2 rounded-xl lg:hidden"
+          className="btn-ghost"
+          style={{ padding: '7px', borderRadius: 'var(--radius-sm)', display: 'flex' }}
           aria-label="Toggle sidebar"
+          id="topbar-menu-btn"
         >
-          <Bars3Icon className="w-5 h-5" />
+          <Bars3Icon style={{ width: 20, height: 20 }} />
         </button>
+
         {title && (
-          <h2 className="text-base font-semibold text-surface-900 dark:text-white font-display hidden sm:block">
+          <h2 style={{
+            fontSize: 16,
+            fontWeight: 600,
+            color: 'var(--text-primary)',
+            letterSpacing: '-0.2px',
+          }}>
             {title}
           </h2>
         )}
       </div>
 
       {/* Right */}
-      <div className="flex items-center gap-2">
+      <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
         <Link
           to="/builder"
-          className="btn-primary btn-sm hidden sm:inline-flex rounded-full px-4"
+          className="btn-primary btn-sm"
+          style={{ display: 'none', borderRadius: 'var(--radius-md)' }}
+          id="topbar-new-resume-btn"
         >
-          <PlusIcon className="w-4 h-4" />
+          <PlusIcon style={{ width: 15, height: 15 }} />
           New Resume
         </Link>
 
+        {/* Dark mode */}
         <button
           onClick={() => dispatch(toggleDarkMode())}
-          className="btn-ghost p-2 rounded-xl"
+          className="btn-ghost"
+          style={{ padding: '7px', borderRadius: 'var(--radius-sm)', display: 'flex' }}
           aria-label="Toggle dark mode"
+          id="topbar-theme-btn"
         >
-          {darkMode ? <SunIcon className="w-5 h-5" /> : <MoonIcon className="w-5 h-5" />}
+          {darkMode
+            ? <SunIcon style={{ width: 18, height: 18 }} />
+            : <MoonIcon style={{ width: 18, height: 18 }} />
+          }
         </button>
 
-        <button className="btn-ghost p-2 rounded-xl relative" aria-label="Notifications">
-          <BellIcon className="w-5 h-5" />
-          <span className="absolute top-1.5 right-1.5 w-2 h-2 bg-accent-500 rounded-full" />
+        {/* Notifications */}
+        <button
+          className="btn-ghost"
+          style={{ padding: '7px', borderRadius: 'var(--radius-sm)', display: 'flex', position: 'relative' }}
+          aria-label="Notifications"
+          id="topbar-notifications-btn"
+        >
+          <BellIcon style={{ width: 18, height: 18 }} />
+          <span style={{
+            position: 'absolute',
+            top: 7,
+            right: 7,
+            width: 7,
+            height: 7,
+            borderRadius: '50%',
+            background: 'var(--warning)',
+            border: '1.5px solid var(--bg-card)',
+          }} />
         </button>
 
+        {/* Avatar */}
         {user && (
           <button
             onClick={() => navigate('/profile')}
-            className="w-8 h-8 rounded-full bg-gradient-to-br from-primary-500 to-purple-600 flex items-center justify-center text-white text-xs font-bold overflow-hidden"
+            style={{
+              width: 34,
+              height: 34,
+              borderRadius: '50%',
+              background: 'linear-gradient(135deg, var(--brand) 0%, #a855f7 100%)',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              color: 'white',
+              fontSize: 12,
+              fontWeight: 700,
+              overflow: 'hidden',
+              border: 'none',
+              cursor: 'pointer',
+              flexShrink: 0,
+              boxShadow: 'var(--shadow-btn)',
+            }}
+            id="topbar-avatar-btn"
           >
-            {user.photoURL ? (
-              <img src={user.photoURL} alt="" className="w-full h-full object-cover" />
-            ) : (
-              generateInitials(user.displayName || user.email)
-            )}
+            {user.photoURL
+              ? <img src={user.photoURL} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+              : generateInitials(user.displayName || user.email)
+            }
           </button>
         )}
       </div>
+
+      <style>{`
+        @media (min-width: 640px) {
+          #topbar-new-resume-btn { display: inline-flex !important; }
+          #topbar-menu-btn { display: none; }
+        }
+        @media (min-width: 1024px) {
+          #topbar-menu-btn { display: none !important; }
+        }
+      `}</style>
     </header>
   );
 };

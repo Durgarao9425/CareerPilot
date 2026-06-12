@@ -73,7 +73,7 @@ const Login = () => {
           size="lg"
           loading={googleLoading}
           onClick={handleGoogleSignIn}
-          className="w-full bg-white/10 hover:bg-white/20 border border-white/20 text-white"
+          className="w-full"
         >
           <svg className="w-5 h-5" viewBox="0 0 24 24">
             <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" />
@@ -84,12 +84,12 @@ const Login = () => {
           Continue with Google
         </Button>
 
-        <div className="relative">
-          <div className="absolute inset-0 flex items-center">
-            <div className="w-full border-t border-surface-700" />
+        <div style={{ position: 'relative', margin: '8px 0' }}>
+          <div style={{ position: 'absolute', inset: 0, display: 'flex', alignItems: 'center' }}>
+            <div style={{ width: '100%', borderTop: '1px solid var(--border)' }} />
           </div>
-          <div className="relative flex justify-center text-xs text-surface-500">
-            <span className="bg-surface-950 px-3">or continue with email</span>
+          <div style={{ position: 'relative', display: 'flex', justifyContent: 'center' }}>
+            <span style={{ background: 'var(--bg-card)', padding: '0 12px', fontSize: 12, color: 'var(--text-muted)' }}>or continue with email</span>
           </div>
         </div>
 
@@ -100,29 +100,27 @@ const Login = () => {
             type="email"
             placeholder="you@example.com"
             error={errors.email?.message}
-            className="bg-white/5 border-white/10 text-white placeholder-surface-500 focus:border-primary-500"
             {...register('email')}
           />
-          <div className="relative">
+          <div style={{ position: 'relative' }}>
             <Input
               label="Password"
               type={showPassword ? 'text' : 'password'}
               placeholder="••••••••"
               error={errors.password?.message}
-              className="bg-white/5 border-white/10 text-white placeholder-surface-500 focus:border-primary-500 pr-10"
               {...register('password')}
             />
             <button
               type="button"
               onClick={() => setShowPassword((v) => !v)}
-              className="absolute right-3 top-9 text-surface-400 hover:text-surface-200"
+              style={{ position: 'absolute', right: 10, top: 36, color: 'var(--text-muted)', background: 'none', border: 'none', cursor: 'pointer' }}
             >
               {showPassword ? <EyeSlashIcon className="w-4 h-4" /> : <EyeIcon className="w-4 h-4" />}
             </button>
           </div>
 
-          <div className="flex justify-end">
-            <Link to="/forgot-password" className="text-sm text-primary-400 hover:text-primary-300">
+          <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
+            <Link to="/forgot-password" style={{ fontSize: 13, color: 'var(--brand)', textDecoration: 'none' }}>
               Forgot password?
             </Link>
           </div>
@@ -132,9 +130,9 @@ const Login = () => {
           </Button>
         </form>
 
-        <p className="text-center text-sm text-surface-400">
+        <p style={{ textAlign: 'center', fontSize: 13, color: 'var(--text-secondary)' }}>
           Don't have an account?{' '}
-          <Link to="/register" className="text-primary-400 hover:text-primary-300 font-medium">
+          <Link to="/register" style={{ color: 'var(--brand)', textDecoration: 'none', fontWeight: 500 }}>
             Create account
           </Link>
         </p>
